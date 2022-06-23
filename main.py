@@ -1,6 +1,9 @@
 from words import word_list
 from random import randint
 import re
+from translate import Translator
+from PyDictionary import PyDictionary
+
 
 # removing words whose lenght is less than 3 and those which contain a '-'
 for word in word_list:
@@ -19,12 +22,28 @@ def find_occurences(letter, word):
     matches_positions = [match.start() for match in matches]
     return matches_positions
 
+# function to translate the word into a given language
+def translate(word, language):
+    translator = Translator(to_lang=language)
+    translation = translator.translate(word)
+    return translation
+
+# get the first meaning of a word
+def get_meaning(word):
+    dictionary = PyDictionary()
+    meaning_dict = dictionary.meaning(word)
+    meaning = list(meaning_dict.values())[0][0]
+    return meaning
+
 
 # function to play the game
 def play(word, max_wrong_guesses):
     # printing as many '-' as the word's length
     secret_word = list('-' * len(word))
     print(''.join(secret_word))
+
+    translated_word = translate(word, 'it')  # the language the program translates to can be changed here
+    meaning = get_meaning(word)
 
     wrong_guesses = 0
     letters_used = []
@@ -44,15 +63,19 @@ def play(word, max_wrong_guesses):
                 secret_word[index] = letter
 
         # printing the word and checking whether the player has won
-        print(''.join(secret_word))
         if ''.join(secret_word) != word and wrong_guesses != max_wrong_guesses:
+            print(''.join(secret_word))
             print('Number of wrong guesses allowed: {}'.format(max_wrong_guesses - wrong_guesses))
             print('Letters already used: ' + ' '.join(letters_used))
         elif wrong_guesses == max_wrong_guesses:
-            print('Game over! The word was ' + word + '.')
+            print(''.join(secret_word))
+            print('\nGame over! The word was ' + word + ' (' + translated_word + ').')
+            print('Meaning of the word: ' + meaning + '.')
             break
         else:
-            print('You won!')
+            print(''.join(secret_word))
+            print('\nYou won! The word was ' + word + ' (' + translated_word + ').')
+            print('Meaning of the word: ' + meaning + '.')
             break
 
 

@@ -22,12 +22,6 @@ def find_occurences(letter, word):
     matches_positions = [match.start() for match in matches]
     return matches_positions
 
-# function to translate the word into a given language
-def translate(word, language):
-    translator = Translator(to_lang=language)
-    translation = translator.translate(word)
-    return translation
-
 # get the first meaning of a word
 def get_meaning(word):
     dictionary = PyDictionary()
@@ -42,7 +36,6 @@ def play(word, max_wrong_guesses):
     secret_word = list('-' * len(word))
     print(''.join(secret_word))
 
-    translated_word = translate(word, 'it')  # the language the program translates to can be changed here
     meaning = get_meaning(word)
 
     wrong_guesses = 0
@@ -69,12 +62,12 @@ def play(word, max_wrong_guesses):
             print('Letters already used: ' + ' '.join(letters_used))
         elif wrong_guesses == max_wrong_guesses:
             print(''.join(secret_word))
-            print('\nGame over! The word was ' + word + ' (' + translated_word + ').')
+            print('\nGame over! The word was ' + word + '.')
             print('Meaning of the word: ' + meaning + '.')
             break
         else:
             print(''.join(secret_word))
-            print('\nYou won! The word was ' + word + ' (' + translated_word + ').')
+            print('\nYou won! The word was ' + word + '.')
             print('Meaning of the word: ' + meaning + '.')
             break
 
